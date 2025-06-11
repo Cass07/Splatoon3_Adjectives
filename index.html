@@ -103,15 +103,19 @@
 
 </body>
 </html>
+<script src="versionInitiator.js"></script>
 <script>
 
     let globalAdjData;
     let globalSubjects;
-    const globalVersion = "910";
-    const globalVersionText = "9.1.0";
 
     $(document).ready(function () {
         let prefix = "";
+
+        const versionObject = VersionInitiator.getVersion();
+
+        const globalVersion = versionObject.globalVersion;
+        const globalVersionText = versionObject.globalVersionText;
 
 
         let jpSubjectTable = [];

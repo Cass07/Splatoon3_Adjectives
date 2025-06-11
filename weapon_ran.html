@@ -99,6 +99,9 @@
         <div class = "col">
             <label for="weapon_onlybase">메인만 선택</label>
             <input type = "radio" name = "collab" class = "filter_checkbox" value = "adjective" id = "weapon_onlybase">
+            <label for="weapon_onlybase_noscope">메인만 선택 (스코프도 제외)</label>
+            <input type = "radio" name = "collab" class = "filter_checkbox" value = "adjective" id = "weapon_onlybase_noscope">
+            <br>
             <label for="weapon_collab">컬래버도 선택</label>
             <input type = "radio" name = "collab" class = "filter_checkbox" value = "subject" id = "weapon_collab" checked>
         </div>
@@ -120,19 +123,25 @@
 
 </body>
 </html>
+<script src="versionInitiator.js"></script>
 <script>
 
     let mainWeapon;
     let collabWeapon;
+    let mainWeaponNoscope;
     let randomResult;
-    const globalVersion = "910";
-    const globalVersionText = "9.1.0";
 
     $(document).ready(function () {
         let prefix = "";
 
         mainWeapon = [];
         collabWeapon = [];
+        mainWeaponNoscope = [];
+
+        const versionObject = VersionInitiator.getVersion();
+
+        const globalVersion = versionObject.globalVersion;
+        const globalVersionText = versionObject.globalVersionText;
 
         let weaponNameTable = [];
 
@@ -151,6 +160,14 @@
                     //base 무기만
                     if(item["__RowId"].endsWith("00")) {
                         mainWeapon.push({
+                            "ID" : item["Id"],
+                            "name" : weaponNameTable[item["__RowId"]],
+                            "image" : "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
+                        });
+                    }
+                    //base 무기만 (스코프 제외)
+                    if(item["__RowId"].endsWith("00") && !item["__RowId"].includes("LongScope")) {
+                        mainWeaponNoscope.push({
                             "ID" : item["Id"],
                             "name" : weaponNameTable[item["__RowId"]],
                             "image" : "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
@@ -209,6 +226,9 @@
         let resultDiv = "";
         if($("#weapon_collab").is(":checked")) {
             weaponList = collabWeapon;
+        }
+        if($("#weapon_onlybase_noscope").is(":checked")) {
+            weaponList = mainWeaponNoscope;
         }
         if($("#weapon_same").is(":checked")) {
             randomResult = getRandomWeapon(weaponList, $("#weapon_dup").is(":checked"), 1);
