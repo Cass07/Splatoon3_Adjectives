@@ -59,7 +59,8 @@
         </div>
     </div>
 </nav>
-<a style="position : fixed; bottom : 20px; right : 20px; width : 50px; height : 50px; border-radius: 100px; z-index: 9999;" href="#"
+<a style="position : fixed; bottom : 20px; right : 20px; width : 50px; height : 50px; border-radius: 100px; z-index: 9999;"
+   href="#"
    onclick="scrollTop_func();return false;">
     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#3ba056" class="bi bi-arrow-up-circle-fill"
          viewBox="0 0 16 16">
@@ -71,50 +72,50 @@
     <div class="row">
         <div class="col">
             <h2><strong>스플래툰 3 무기 랜더마이저</strong></h2>
-            <p><a href = "https://github.com/Leanny/splat3" style = "text-decoration: underline">데이터 출처</a></p>
-            <p>Version : <span id = "versionText"></span></p>
+            <p><a href="https://github.com/Leanny/splat3" style="text-decoration: underline">데이터 출처</a></p>
+            <p>Version : <span id="versionText"></span></p>
         </div>
     </div>
-    <div class = "row">
-        <div class = "col">
-            <label for = "teams" class = "form-label">팀원 수</label>
-            <input type = "number" class = "form-control" min = "1" max = "8" id = "teams" value = "8">
+    <div class="row">
+        <div class="col">
+            <label for="teams" class="form-label">팀원 수</label>
+            <input type="number" class="form-control" min="1" max="8" id="teams" value="8">
         </div>
     </div>
-    <div class = "row">
-        <div class = "col">
+    <div class="row">
+        <div class="col">
             <label for="weapon_same">무기 통일</label>
-            <input type = "radio" name = "weapon_base" class = "filter_checkbox" value = "adjective" id = "weapon_same">
+            <input type="radio" name="weapon_base" class="filter_checkbox" value="adjective" id="weapon_same">
             <label for="weapon_diff">각자 다른 무기</label>
-            <input type = "radio" name = "weapon_base" class = "filter_checkbox" value = "subject" id = "weapon_diff" checked>
+            <input type="radio" name="weapon_base" class="filter_checkbox" value="subject" id="weapon_diff" checked>
         </div>
     </div>
-    <div class = "row">
-        <div class = "col">
+    <div class="row">
+        <div class="col">
             <label for="weapon_dup">무기 중복 허용</label>
-            <input type = "checkbox" name = "kind" class = "filter_checkbox" value = "adjective" id = "weapon_dup" checked>
+            <input type="checkbox" name="kind" class="filter_checkbox" value="adjective" id="weapon_dup" checked>
         </div>
     </div>
-    <div class = "row">
-        <div class = "col">
+    <div class="row">
+        <div class="col">
             <label for="weapon_onlybase">메인만 선택</label>
-            <input type = "radio" name = "collab" class = "filter_checkbox" value = "adjective" id = "weapon_onlybase">
+            <input type="radio" name="collab" class="filter_checkbox" value="adjective" id="weapon_onlybase">
             <label for="weapon_onlybase_noscope">메인만 선택 (스코프도 제외)</label>
-            <input type = "radio" name = "collab" class = "filter_checkbox" value = "adjective" id = "weapon_onlybase_noscope">
+            <input type="radio" name="collab" class="filter_checkbox" value="adjective" id="weapon_onlybase_noscope">
             <br>
             <label for="weapon_collab">컬래버도 선택</label>
-            <input type = "radio" name = "collab" class = "filter_checkbox" value = "subject" id = "weapon_collab" checked>
+            <input type="radio" name="collab" class="filter_checkbox" value="subject" id="weapon_collab" checked>
         </div>
     </div>
-    <div class = "row">
-        <div class = "col" style = "align-content: center;">
-            <button class = "btn btn-primary" id = "getRandomWeapons">랜덤 무기 선택</button>
-            <button class = "btn btn-primary" id = "copyResult">복사</button>
+    <div class="row">
+        <div class="col" style="align-content: center;">
+            <button class="btn btn-primary" id="getRandomWeapons">랜덤 무기 선택</button>
+            <button class="btn btn-primary" id="copyResult">복사</button>
         </div>
     </div>
 
-    <div style = "height : 50px"></div>
-    <div class = "row" id = "weapon_result">
+    <div style="height : 50px"></div>
+    <div class="row" id="weapon_result">
 
     </div>
 
@@ -145,38 +146,37 @@
 
         let weaponNameTable = [];
 
-        $.ajaxSetup({ async: false });
+        $.ajaxSetup({async: false});
         $.getJSON("data/data/language/KRko_unicode.json", jsonDataTable => {
             weaponNameTable = jsonDataTable["CommonMsg/Weapon/WeaponName_Main"];
         }).then($.getJSON("data/data/mush/" + globalVersion + "/WeaponInfoMain.json", jsonDataTable => {
             jsonDataTable.forEach(item => {
                 //오더 무기, 히어로 무기 제외
-                if(item["Type"] === "Versus" && item["Season"] !== -1 && item["__RowId"] !== "Shooter_Normal_H") {
+                if (item["Type"] === "Versus" && item["__RowId"] !== "Shooter_Normal_H" && !item["__RowId"].endsWith("_O")) {
                     collabWeapon.push({
-                        "ID" : item["Id"],
-                        "name" : weaponNameTable[item["__RowId"]],
-                        "image" : "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
+                        "ID": item["Id"],
+                        "name": weaponNameTable[item["__RowId"]],
+                        "image": "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
                     });
                     //base 무기만
-                    if(item["__RowId"].endsWith("00")) {
+                    if (item["__RowId"].endsWith("00")) {
                         mainWeapon.push({
-                            "ID" : item["Id"],
-                            "name" : weaponNameTable[item["__RowId"]],
-                            "image" : "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
+                            "ID": item["Id"],
+                            "name": weaponNameTable[item["__RowId"]],
+                            "image": "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
                         });
                     }
                     //base 무기만 (스코프 제외)
-                    if(item["__RowId"].endsWith("00") && !item["__RowId"].includes("LongScope")) {
+                    if (item["__RowId"].endsWith("00") && !item["__RowId"].includes("LongScope")) {
                         mainWeaponNoscope.push({
-                            "ID" : item["Id"],
-                            "name" : weaponNameTable[item["__RowId"]],
-                            "image" : "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
+                            "ID": item["Id"],
+                            "name": weaponNameTable[item["__RowId"]],
+                            "image": "data/images/weapon_flat/Path_Wst_" + item["__RowId"] + ".png"
                         });
                     }
                 }
             });
         }));
-
 
 
         $("#versionText").html(globalVersionText);
@@ -198,10 +198,10 @@
     function getRandomWeapon(weaponDatas, isDup, count) {
         let result = [];
         let tempWeaponDatas = weaponDatas.slice();
-        for(let i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {
             let randomIndex = Math.floor(Math.random() * tempWeaponDatas.length);
             result.push(tempWeaponDatas[randomIndex]);
-            if(!isDup) {
+            if (!isDup) {
                 tempWeaponDatas.splice(randomIndex, 1);
             }
         }
@@ -210,7 +210,7 @@
 
     $('#copyResult').on('click', function () {
         let copyText = "";
-        if(randomResult === undefined) {
+        if (randomResult === undefined) {
             alert("복사할 결과가 없습니다.");
             return;
         }
@@ -224,16 +224,16 @@
     $('#getRandomWeapons').on('click', function () {
         let weaponList = mainWeapon;
         let resultDiv = "";
-        if($("#weapon_collab").is(":checked")) {
+        if ($("#weapon_collab").is(":checked")) {
             weaponList = collabWeapon;
         }
-        if($("#weapon_onlybase_noscope").is(":checked")) {
+        if ($("#weapon_onlybase_noscope").is(":checked")) {
             weaponList = mainWeaponNoscope;
         }
-        if($("#weapon_same").is(":checked")) {
+        if ($("#weapon_same").is(":checked")) {
             randomResult = getRandomWeapon(weaponList, $("#weapon_dup").is(":checked"), 1);
             let count = $("#teams").val();
-            for(let i = 0; i < count; i++) {
+            for (let i = 0; i < count; i++) {
                 resultDiv += makeWeaponDiv(randomResult[0], i + 1);
             }
         } else {

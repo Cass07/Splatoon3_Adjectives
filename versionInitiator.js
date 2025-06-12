@@ -3,13 +3,13 @@
     function VersionInitiator() {
         let _ver = {};
 
-        const $version = {
-            "globalVersion": "930",
-            "globalVersionText": "9.3.0",
+        const VERSION = {
+            "globalVersion": "1000",
+            "globalVersionText": "10.0.0",
         }
 
         _ver.getVersion = function() {
-            return $version;
+            return VERSION;
         }
 
         return _ver;

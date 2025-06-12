@@ -55,7 +55,8 @@
         </div>
     </div>
 </nav>
-<a style="position : fixed; bottom : 20px; right : 20px; width : 50px; height : 50px; border-radius: 100px; z-index: 9999;" href="#"
+<a style="position : fixed; bottom : 20px; right : 20px; width : 50px; height : 50px; border-radius: 100px; z-index: 9999;"
+   href="#"
    onclick="scrollTop_func();return false;">
     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#3ba056" class="bi bi-arrow-up-circle-fill"
          viewBox="0 0 16 16">
@@ -67,16 +68,17 @@
     <div class="row">
         <div class="col">
             <h2><strong>스플래툰 3 별명 리스트 한-일</strong></h2>
-            <p>지역페스때마다 불편해서 만듬 <a href = "https://github.com/Leanny/splat3" style = "text-decoration: underline">데이터 출처</a></p>
-            <p>Version : <span id = "versionText"></span></p>
+            <p>지역페스때마다 불편해서 만듬 <a href="https://github.com/Leanny/splat3" style="text-decoration: underline">데이터 출처</a>
+            </p>
+            <p>Version : <span id="versionText"></span></p>
         </div>
     </div>
-    <div class = "row">
-        <div class = "col">
+    <div class="row">
+        <div class="col">
             <label for="kind_ajd">앞 별명</label>
-            <input type = "radio" name = "kind" class = "filter_checkbox" value = "adjective" id = "kind_ajd" checked>
+            <input type="radio" name="kind" class="filter_checkbox" value="adjective" id="kind_ajd" checked>
             <label for="kind_sub">뒷 별명</label>
-            <input type = "radio" name = "kind" class = "filter_checkbox" value = "subject" id = "kind_sub">
+            <input type="radio" name="kind" class="filter_checkbox" value="subject" id="kind_sub">
         </div>
     </div>
     <div class="row">
@@ -125,7 +127,7 @@
         globalAdjData = [];
         globalSubjects = [];
 
-        $.ajaxSetup({ async: false });
+        $.ajaxSetup({async: false});
         $.getJSON("data/data/language/KRko_unicode.json", jsonDataTable => {
             krAdjTableTable = jsonDataTable["CommonMsg/Byname/BynameAdjective"];
             krSubjectTable = jsonDataTable["CommonMsg/Byname/BynameSubject"];
@@ -134,14 +136,22 @@
             jpSubjectTable = jsonDataTable["CommonMsg/Byname/BynameSubject"];
         })).then($.getJSON("data/data/parameter/" + globalVersion + "/byname/Adjective_KRko.json", jsonDataTable => {
             jsonDataTable["Labels"].forEach(item => {
-                if(krAdjTableTable[item] !== undefined) {
-                    globalAdjData.push({"ID" : item, "kr":  krAdjTableTable[item], "jp" : ruby_changer(jpAdjTableTable[item])});
+                if (krAdjTableTable[item] !== undefined) {
+                    globalAdjData.push({
+                        "ID": item,
+                        "kr": krAdjTableTable[item],
+                        "jp": ruby_changer(jpAdjTableTable[item])
+                    });
                 }
             });
         })).then($.getJSON("data/data/parameter/" + globalVersion + "/byname/Subject_KRko.json", jsonDataTable => {
             jsonDataTable["Labels"].forEach(item => {
-                if(krSubjectTable[item] !== undefined) {
-                    globalSubjects.push({"ID" : item, "kr":  krSubjectTable[item], "jp" : ruby_changer(jpSubjectTable[item])});
+                if (krSubjectTable[item] !== undefined) {
+                    globalSubjects.push({
+                        "ID": item,
+                        "kr": krSubjectTable[item],
+                        "jp": ruby_changer(jpSubjectTable[item])
+                    });
                 }
             });
         })).then(function () {
@@ -152,7 +162,7 @@
     });
 
     $('.filter_checkbox').on('click', function (event) {
-        if(event.target.value === "subject") {
+        if (event.target.value === "subject") {
             $("#table").bootstrapTable('load', globalSubjects);
         } else {
             $("#table").bootstrapTable('load', globalAdjData);
